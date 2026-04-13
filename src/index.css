@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Assistant", ui-sans-serif, system-ui, sans-serif;
+  
+  --color-primary: #0b3c5d;
+  --color-accent: #17b7ae;
+  --color-premium: #d4a373;
+  --color-bg-light: #F7F9FB;
+  
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply font-sans text-slate-900 antialiased;
+  }
+}
+
+.rtl {
+  direction: rtl;
+}
