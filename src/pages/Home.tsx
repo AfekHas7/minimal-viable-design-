@@ -25,7 +25,7 @@ import {
   RefreshCw,
   CheckCircle
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Footer } from '../components/SharedLayout';
 import heroImage from '../assets/imageforVlandingpage.png';
 import appModelImage from '../assets/image_ofour_model_with the_app.png';
@@ -217,44 +217,18 @@ const FAQItem = ({ question, answer }: { question: string; answer: string; key?:
 // --- Main Application ---
 
 export default function App() {
+  const navigate = useNavigate();
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [consentTerms, setConsentTerms] = useState(false);
   const [consentMarketing, setConsentMarketing] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [statusMessage, setStatusMessage] = useState<{type: 'success' | 'error', text: string} | null>(null);
 
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const canProceed = isEmailValid && consentTerms;
 
-  const handleProceed = async () => {
-    if (!canProceed || isLoading) return;
-    
-    setIsLoading(true);
-    setStatusMessage(null);
-    try {
-      const response = await fetch("/api/purchase", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          products: ["program:self_worth_21d"],
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Purchase request failed");
-      }
-
-      setStatusMessage({ type: 'success', text: 'Check your email to access the program' });
-    } catch (error) {
-      console.error("Test purchase error:", error);
-      setStatusMessage({ type: 'error', text: 'Something went wrong. Please try again.' });
-    } finally {
-      setIsLoading(false);
-    }
+  const handleProceed = () => {
+    if (!canProceed) return;
+    navigate(`/checkout?email=${encodeURIComponent(email)}`);
   };
 
   const scrollToCTA = () => {
@@ -969,22 +943,12 @@ export default function App() {
                       </label>
                     </div>
 
-                    {statusMessage && (
-                      <div className={`p-4 rounded-xl text-center text-sm font-medium border ${
-                        statusMessage.type === 'success' 
-                          ? 'bg-emerald-50 text-emerald-600 border-emerald-100' 
-                          : 'bg-red-50 text-red-600 border-red-100'
-                      }`}>
-                        {statusMessage.text}
-                      </div>
-                    )}
-
-                    <Button 
+                    <Button
                       onClick={handleProceed}
-                      disabled={!canProceed || isLoading}
+                      disabled={!canProceed}
                       className="w-full py-5 text-xl transition-all mt-6"
                     >
-                      {isLoading ? "מעבד הנתונים..." : "להמשך לתשלום"}
+                      להמשך לתשלום
                     </Button>
                   </div>
                 </div>
