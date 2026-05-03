@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ShieldCheck, Clock, CheckCircle, ArrowLeft, Mail, Lock } from 'lucide-react';
 import { Footer } from '../components/SharedLayout';
@@ -20,6 +20,7 @@ type Status = { type: 'success' | 'error'; text: string } | null;
 
 export default function Checkout() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const email = (searchParams.get('email') || '').trim();
   const emailValid = EMAIL_RE.test(email);
 
@@ -39,7 +40,8 @@ export default function Checkout() {
         body: JSON.stringify({ email, products: [PRODUCT_ID] }),
       });
       if (!res.ok) throw new Error('purchase_failed');
-      setStatus({ type: 'success', text: 'בדוק את האימייל שלך' });
+      navigate(`/success?email=${encodeURIComponent(email)}`, { replace: true });
+      return;
     } catch (err) {
       console.error('checkout: purchase error', err);
       setStatus({ type: 'error', text: 'משהו השתבש. אנא נסו שוב בעוד רגע.' });
