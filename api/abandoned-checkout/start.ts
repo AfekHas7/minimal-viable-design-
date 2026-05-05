@@ -42,13 +42,28 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!upstream.ok) {
       const text = await upstream.text().catch(() => '');
       console.error('abandoned-checkout/start: supabase error', upstream.status, text.slice(0, 500));
-      return res.status(502).json({ ok: false, error: 'upstream_failed' });
+      // TEMP DEBUG: surface upstream status + body to DevTools so we can diagnose
+      // without Vercel runtime logs. Remove once the 502 root cause is identified.
+      return res.status(502).json({
+        ok: false,
+        error: 'upstream_failed',
+        debug: {
+          upstream_status: upstream.status,
+          upstream_body: text.slice(0, 500),
+        },
+      });
     }
 
     return res.status(200).json({ ok: true });
   } catch (err) {
     console.error('abandoned-checkout/start: supabase fetch threw', err);
-    return res.status(502).json({ ok: false, error: 'upstream_unreachable' });
+    // TEMP DEBUG: surface fetch error message. Remove with the block above.
+    const message = err instanceof Error ? err.message : String(err);
+    return res.status(502).json({
+      ok: false,
+      error: 'upstream_unreachable',
+      debug: { message: message.slice(0, 500) },
+    });
   }
 }
 
