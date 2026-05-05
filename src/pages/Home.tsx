@@ -240,6 +240,18 @@ export default function App() {
     }).catch((err) => {
       console.error('marketing-leads: capture failed', err);
     });
+    // TODO(abandoned-checkout step 2): when /api/purchase succeeds in Checkout.tsx,
+    // call POST /api/abandoned-checkout/complete to flip completed=true. Until that
+    // endpoint exists, completion is implicit and these rows stay completed=false.
+    // TEMP: production debug log — remove once /api/abandoned-checkout/start is confirmed working.
+    console.log('[abandoned-checkout] start firing', { email });
+    void fetch('/api/abandoned-checkout/start', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    }).catch((err) => {
+      console.error('abandoned-checkout: start failed', err);
+    });
     navigate(`/checkout?email=${encodeURIComponent(email)}`);
   };
 
