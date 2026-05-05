@@ -228,6 +228,18 @@ export default function App() {
 
   const handleProceed = () => {
     if (!canProceed) return;
+    // TEMP: production debug log — remove once /api/marketing-leads is confirmed working.
+    console.log('[marketing-leads] handleProceed firing', {
+      email,
+      consent_marketing: consentMarketing,
+    });
+    void fetch('/api/marketing-leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, consent_marketing: consentMarketing }),
+    }).catch((err) => {
+      console.error('marketing-leads: capture failed', err);
+    });
     navigate(`/checkout?email=${encodeURIComponent(email)}`);
   };
 
