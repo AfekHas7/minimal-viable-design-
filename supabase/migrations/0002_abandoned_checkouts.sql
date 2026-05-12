@@ -64,3 +64,4 @@ grant select, insert, update on public.abandoned_checkouts to service_role;
 
 revoke all  on function public.upsert_abandoned_checkout(text, text) from public, anon, authenticated;
 grant execute on function public.upsert_abandoned_checkout(text, text) to service_role;
+

@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Footer } from '../components/SharedLayout';
+import { track } from '../lib/pixel';
 import heroImage from '../assets/imageforVlandingpage.png';
 import appModelImage from '../assets/image_ofour_model_with the_app.png';
 
@@ -228,6 +229,12 @@ export default function App() {
 
   const handleProceed = () => {
     if (!canProceed) return;
+
+    track('InitiateCheckout', { value: 249, currency: 'ILS' });
+
+    // TODO(pixel): when a free-guide / lead-magnet flow is added, fire
+    //   track('Lead') from that flow's submit handler (not from this purchase modal).
+
     // TEMP: production debug log — remove once /api/marketing-leads is confirmed working.
     console.log('[marketing-leads] handleProceed firing', {
       email,

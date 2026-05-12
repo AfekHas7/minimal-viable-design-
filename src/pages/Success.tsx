@@ -1,8 +1,10 @@
+import { useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ArrowLeft, MailCheck, Mail } from 'lucide-react';
 import { Footer } from '../components/SharedLayout';
 import logoImg from '../assets/logoVwhitoutslogen.png';
+import { track } from '../lib/pixel';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const GMAIL_INBOX = 'https://mail.google.com/mail/u/0/#inbox';
@@ -12,6 +14,12 @@ export default function Success() {
   const [searchParams] = useSearchParams();
   const rawEmail = (searchParams.get('email') || '').trim();
   const buyerEmail = EMAIL_RE.test(rawEmail) ? rawEmail : '';
+
+  useEffect(() => {
+    if (sessionStorage.getItem('pixel_purchase_pending') !== '1') return;
+    sessionStorage.removeItem('pixel_purchase_pending');
+    track('Purchase', { value: 249, currency: 'ILS' });
+  }, []);
 
   return (
     <div className="rtl min-h-screen bg-bg-light flex flex-col">

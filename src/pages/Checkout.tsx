@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ShieldCheck, Clock, CheckCircle, ArrowLeft, Mail, Lock } from 'lucide-react';
 import { Footer } from '../components/SharedLayout';
 import logoImg from '../assets/logoVwhitoutslogen.png';
+import { track } from '../lib/pixel';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PRODUCT_ID = 'program:self_worth_21d';
@@ -29,6 +30,10 @@ export default function Checkout() {
 
   const isDone = status?.type === 'success';
 
+  useEffect(() => {
+    track('AddPaymentInfo');
+  }, []);
+
   const handlePay = async () => {
     if (!emailValid || isLoading || isDone) return;
     setIsLoading(true);
@@ -40,6 +45,7 @@ export default function Checkout() {
         body: JSON.stringify({ email, products: [PRODUCT_ID] }),
       });
       if (!res.ok) throw new Error('purchase_failed');
+      sessionStorage.setItem('pixel_purchase_pending', '1');
       navigate(`/success?email=${encodeURIComponent(email)}`, { replace: true });
       return;
     } catch (err) {
