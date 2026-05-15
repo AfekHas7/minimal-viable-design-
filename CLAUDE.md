@@ -23,7 +23,7 @@ Hebrew-language landing page for "עוצמה שקטה" — a 21-day self-worth p
 
 ## Routing
 
-Five routes registered in `src/App.tsx` (BrowserRouter): `/`, `/terms`, `/privacy`, `/checkout`, `/success`. There is no `vercel.json` — Vercel's Vite framework preset provides SPA fallback (unknown path → `index.html`). If a new route 404s on hard refresh in production, that's the first thing to check.
+Five routes registered in `src/App.tsx` (BrowserRouter): `/`, `/terms`, `/privacy`, `/checkout`, `/success`. SPA fallback is provided by `vercel.json` at the repo root, which rewrites every unmatched path to `/index.html`. Static assets in `dist/` and API routes under `api/` are matched by Vercel before the rewrite, so they are unaffected. If a new route 404s on hard refresh in production, check that the catch-all rewrite in `vercel.json` is still present and that no earlier `redirects` rule is intercepting the path.
 
 ## Purchase / lead-capture flow
 
