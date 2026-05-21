@@ -40,6 +40,8 @@ import review6 from '../assets/screenshot6.jpg';
 
 const reviews = [review1, review2, review3, review4, review5, review6];
 
+const GROW_PAYMENT_LINK = 'https://pay.grow.link/MTAwNzky~10bc2652176583702ac8458d9528c758-MzQ0MDkwMQ';
+
 const PsychologicalLoop = () => {
   const steps = [
     { label: "מחשבה", icon: Brain, color: "text-blue-500", bg: "bg-blue-50" },
@@ -244,6 +246,7 @@ export default function App() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, consent_marketing: consentMarketing }),
+      keepalive: true,
     }).catch((err) => {
       console.error('marketing-leads: capture failed', err);
     });
@@ -256,10 +259,11 @@ export default function App() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),
+      keepalive: true,
     }).catch((err) => {
       console.error('abandoned-checkout: start failed', err);
     });
-    navigate(`/checkout?email=${encodeURIComponent(email)}`);
+    window.location.href = `${GROW_PAYMENT_LINK}?email=${encodeURIComponent(email)}`;
   };
 
   const scrollToCTA = () => {
