@@ -263,6 +263,7 @@ export default function App() {
     }).catch((err) => {
       console.error('abandoned-checkout: start failed', err);
     });
+    sessionStorage.setItem('grow_checkout_started', '1');
     window.location.href = `${GROW_PAYMENT_LINK}?email=${encodeURIComponent(email)}`;
   };
 

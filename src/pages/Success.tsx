@@ -16,9 +16,17 @@ export default function Success() {
   const buyerEmail = EMAIL_RE.test(rawEmail) ? rawEmail : '';
 
   useEffect(() => {
-    if (sessionStorage.getItem('pixel_purchase_pending') !== '1') return;
-    sessionStorage.removeItem('pixel_purchase_pending');
+    if (sessionStorage.getItem('meta_purchase_tracked_v1') === '1') return;
+
+    const fromCheckout = sessionStorage.getItem('pixel_purchase_pending') === '1';
+    const fromGrow = sessionStorage.getItem('grow_checkout_started') === '1';
+    if (!fromCheckout && !fromGrow) return;
+
     track('Purchase', { value: 249, currency: 'ILS' });
+
+    sessionStorage.removeItem('pixel_purchase_pending');
+    sessionStorage.removeItem('grow_checkout_started');
+    sessionStorage.setItem('meta_purchase_tracked_v1', '1');
   }, []);
 
   return (
