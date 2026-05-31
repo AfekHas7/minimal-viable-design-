@@ -304,7 +304,7 @@ export default function App() {
               <p className="text-sm md:text-base text-slate-600 mb-4 leading-relaxed max-w-xl font-medium">
                 תהליך של 21 יום המבוסס על מחקרים בפסיכולוגיה<br className="hidden md:block" />
                 {" "}שנועד לפרק את התחושה שאתה "לא מספיק"<br className="hidden md:block" />
-                {" "}ולבנות ערך עצמי יציב מבפנים.<br className="hidden md:block" />
+                {" "}ולבנות ערך עצמי וביטחון יציב מבפנים.<br className="hidden md:block" />
                 <br className="hidden md:block" />
                 רק שיטה פרקטית שעובדת.<br className="hidden md:block" />
                 <br className="hidden md:block" />
