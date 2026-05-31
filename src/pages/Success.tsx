@@ -5,6 +5,7 @@ import { ArrowLeft, MailCheck, Mail } from 'lucide-react';
 import { Footer } from '../components/SharedLayout';
 import logoImg from '../assets/logoVwhitoutslogen.png';
 import { track } from '../lib/pixel';
+import { gaEvent } from '../lib/ga';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const GMAIL_INBOX = 'https://mail.google.com/mail/u/0/#inbox';
@@ -23,6 +24,7 @@ export default function Success() {
     if (!fromCheckout && !fromGrow) return;
 
     track('Purchase', { value: 249, currency: 'ILS' });
+    gaEvent('purchase', { value: 249, currency: 'ILS' });
 
     sessionStorage.removeItem('pixel_purchase_pending');
     sessionStorage.removeItem('grow_checkout_started');

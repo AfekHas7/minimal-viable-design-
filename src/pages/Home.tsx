@@ -28,6 +28,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { Footer } from '../components/SharedLayout';
 import { track } from '../lib/pixel';
+import { gaEvent } from '../lib/ga';
 import heroImage from '../assets/imageforVlandingpage.png';
 import appModelImage from '../assets/image_ofour_model_with the_app.png';
 
@@ -233,6 +234,7 @@ export default function App() {
     if (!canProceed) return;
 
     track('InitiateCheckout', { value: 249, currency: 'ILS' });
+    gaEvent('begin_checkout', { value: 249, currency: 'ILS' });
 
     // TODO(pixel): when a free-guide / lead-magnet flow is added, fire
     //   track('Lead') from that flow's submit handler (not from this purchase modal).

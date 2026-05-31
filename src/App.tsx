@@ -6,8 +6,9 @@ import Privacy from './pages/Privacy';
 import Checkout from './pages/Checkout';
 import Success from './pages/Success';
 import { track } from './lib/pixel';
+import { gaEvent } from './lib/ga';
 
-function PixelRouteListener() {
+function RouteAnalyticsListener() {
   const location = useLocation();
   const isInitial = useRef(true);
   useEffect(() => {
@@ -16,6 +17,11 @@ function PixelRouteListener() {
       return;
     }
     track('PageView');
+    gaEvent('page_view', {
+      page_path: location.pathname,
+      page_location: window.location.href,
+      page_title: document.title,
+    });
   }, [location.pathname]);
   return null;
 }
@@ -23,7 +29,7 @@ function PixelRouteListener() {
 function App() {
   return (
     <Router>
-      <PixelRouteListener />
+      <RouteAnalyticsListener />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/terms" element={<Terms />} />

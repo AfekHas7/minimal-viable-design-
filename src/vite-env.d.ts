@@ -7,6 +7,8 @@ declare global {
       eventOrId: string,
       params?: Record<string, unknown>
     ) => void;
+    gtag?: (...args: unknown[]) => void;
+    dataLayer?: unknown[];
   }
 }
 
